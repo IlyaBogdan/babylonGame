@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import BasicScene from "../BasicScene";
 import styles from './style.module.css';
+import { LevelUI } from "../Components/LevelUI";
 
 export const BabylonCanvas: React.FC = () => {
 
@@ -14,6 +15,7 @@ export const BabylonCanvas: React.FC = () => {
 
     return (
         <>
+            {/* <LevelUI/> */}
             <canvas className={styles.canvas} ref={babylonCanvas}></canvas>
         </>
     ); 

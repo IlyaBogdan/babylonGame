@@ -1,0 +1,7 @@
+.levelMenu {
+    position: absolute;
+    display: flex;
+    background-color: aliceblue;
+    width: 100%;
+    justify-content: space-between;
+}
