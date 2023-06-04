@@ -15,7 +15,7 @@ export const BabylonCanvas: React.FC = () => {
 
     return (
         <>
-            {/* <LevelUI/> */}
+            {/* <LevelUI/> из-за этого компонента видеокарта с ума сходит. Пока не разобрался почему */} 
             <canvas className={styles.canvas} ref={babylonCanvas}></canvas>
         </>
     ); 

@@ -16,6 +16,7 @@ export default class BasicScene {
         BasicScene.instance = this;
         this.engine = new BABYLON.Engine(canvas);
         this.scene = this.createScene();
+        this.createSkyBox();
         this.renderFigures();
 
         this.engine.runRenderLoop(() => {
@@ -33,8 +34,26 @@ export default class BasicScene {
         );
 
         camera.attachControl();
+        camera.speed = 0.25;
 
         return scene;
+    }
+
+    private PBRGroung(): BABYLON.PBRMaterial {
+        const pbr = new BABYLON.PBRMaterial('pbr', this.scene);
+
+        pbr.albedoTexture = new BABYLON.Texture('/textures/ground/diffuse.png', this.scene);
+        pbr.bumpTexture = new BABYLON.Texture('/textures/ground/normal.png', this.scene);
+        pbr.invertNormalMapX = true;
+        pbr.invertNormalMapY = true;
+        pbr.metallicTexture = new BABYLON.Texture('/textures/ground/ao.png', this.scene);
+        pbr.useAmbientOcclusionFromMetallicTextureRed = true;
+        pbr.useRoughnessFromMetallicTextureGreen = true;
+        pbr.useMetallnessFromMetallicTextureBlue = true;
+
+        pbr.roughness = 1;
+
+        return pbr;
     }
 
     public renderFigures() {
@@ -45,8 +64,8 @@ export default class BasicScene {
             subdivisions: 500,
             updatable: true
         }, this.scene);
-        ground.applyDisplacementMap('/textures/ground/displacement.png', 0, 0.5, undefined, undefined, new BABYLON.Vector2(2, 2));
-        ground.material = this.createGroundMaterial();
+        //ground.applyDisplacementMap('/textures/ground/displacement.png', 0, 0.5, undefined, undefined, new BABYLON.Vector2(2, 2));
+        ground.material = this.PBRGroung();
 
         const ball: BABYLON.Mesh = BABYLON.MeshBuilder.CreateSphere('ball', {
             diameter: 2
@@ -61,6 +80,13 @@ export default class BasicScene {
             new BABYLON.Vector3(1, -1, 0),
             this.scene!
         );
+        light.intensity = 0.7;
+    }
+
+    private createSkyBox() {
+        const envTex = BABYLON.CubeTexture.CreateFromPrefilteredData('/environment/sky.env', this.scene!);
+        this.scene!.environmentTexture = envTex;
+        this.scene?.createDefaultSkybox(envTex, true);
     }
  
     private createGroundMaterial(): BABYLON.StandardMaterial {
